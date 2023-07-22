@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ethers, formatEther, getAddress } from "ethers";
+import { ethers, formatEther } from "ethers";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
 import { Toaster, toast } from "react-hot-toast";
@@ -8,32 +8,38 @@ import { NavBar } from "../../components/NavBar/NavBar";
 import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
 import { MetaMaskSDK } from "@metamask/sdk";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 export const HomePage = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [currentBalance, setCurrentBalance] = useState("");
-  console.log(currentAccount);
+
   let signer = null;
   let provider = null;
 
   const connectWallet = async () => {
-    new MetaMaskSDK({
-      useDeeplink: true,
-      communicationLayerPreference: "socket",
-    });
-    if (window.ethereum === null) {
-      toast.error("MetaMask not installed");
-      provider = ethers.getDefaultProvider();
-    } else {
-      try {
-        provider = new ethers.BrowserProvider(window.ethereum);
-        signer = await provider.getSigner();
-        getAccountPath(signer.address);
-        toast.success("Connecting successfully");
-      } catch (error) {
-        console.log(error);
-      }
+    const provider = await detectEthereumProvider();
+    setCurrentAccount(provider.selectedAddress);
+    if (provider) {
+      toast.success("Ypaaa");
     }
+    // new MetaMaskSDK({
+    //   useDeeplink: true,
+    //   communicationLayerPreference: "socket",
+    // });
+    // if (window.ethereum === null) {
+    //   toast.error("MetaMask not installed");
+    //   // provider = ethers.getDefaultProvider();
+    // } else {
+    //   try {
+    //     provider = new ethers.BrowserProvider(window.ethereum);
+    //     signer = await provider.getSigner();
+    //     getAccountPath(signer.address);
+    //     toast.success("Connecting successfully");
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
   };
 
   // const connectWallet = async () => {
