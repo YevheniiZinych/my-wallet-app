@@ -14,7 +14,7 @@ export const ConnectBtn = styled(Button)(({ account }) => ({
   "&:hover": {
     border: "2px solid #342f2e",
     color: "#342f2e",
-    transition: "all 0.3s linear",
+    transition: "all 0.1s linear",
   },
 
   marginRight: 10,
