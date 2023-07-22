@@ -18,10 +18,12 @@ export const HomePage = () => {
   let provider = null;
 
   const connectWallet = async () => {
-    const provider = await detectEthereumProvider();
-    setCurrentAccount(provider.selectedAddress);
-    if (provider) {
-      toast.success("Ypaaa");
+    if (window.ethereum) {
+      handleEthereum();
+    } else {
+      window.addEventListener("ethereum#initialized", handleEthereum, {
+        once: true,
+      });
     }
     // new MetaMaskSDK({
     //   useDeeplink: true,
@@ -40,6 +42,16 @@ export const HomePage = () => {
     //     console.log(error);
     //   }
     // }
+  };
+
+  const handleEthereum = () => {
+    const { ethereum } = window;
+    if (ethereum && ethereum.isMetaMask) {
+      toast.success("Ethereum successfully detected!");
+      // Access the decentralized web!
+    } else {
+      toast.error("Please install MetaMask!");
+    }
   };
 
   // const connectWallet = async () => {
