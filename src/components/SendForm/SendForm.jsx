@@ -5,7 +5,7 @@ import { SendTransaction } from "../SendTransaction/SendTransaction";
 
 export const SendForm = ({ currentAccount }) => {
   const [accountValue, setAccountValue] = useState("");
-  const [amount, setAmount] = useState("0");
+  const [amount, setAmount] = useState("");
 
   const handleChange = (e) => {
     switch (e.target.name) {
@@ -22,14 +22,7 @@ export const SendForm = ({ currentAccount }) => {
   };
 
   return (
-    <StyledForm
-      component="form"
-      sx={{
-        "& > :not(style)": { m: 1, width: "25ch" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
+    <StyledForm component="form" noValidate autoComplete="off">
       <TextField
         onChange={handleChange}
         value={accountValue}
