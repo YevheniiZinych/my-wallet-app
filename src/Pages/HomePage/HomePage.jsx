@@ -7,6 +7,7 @@ import { animateOptions } from "../../components/options/AnimateBackOptions/Anim
 import { NavBar } from "../../components/NavBar/NavBar";
 import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
+import { MetaMaskSDK } from "@metamask/sdk";
 
 export const HomePage = () => {
   const [currentAccount, setCurrentAccount] = useState("");
@@ -16,12 +17,16 @@ export const HomePage = () => {
   let provider = null;
 
   const connectWallet = async () => {
-    if (window.ethereum == null) {
+    new MetaMaskSDK({
+      useDeeplink: false,
+      communicationLayerPreference: "socket",
+    });
+    if (window.ethereum === null) {
       toast.error("MetaMask not installed");
       provider = ethers.getDefaultProvider();
     } else {
-      provider = new ethers.BrowserProvider(window.ethereum);
       try {
+        provider = new ethers.BrowserProvider(window.ethereum);
         signer = await provider.getSigner();
         getAccountPath(signer.address);
         toast.success("Connecting successfully");
@@ -30,6 +35,16 @@ export const HomePage = () => {
       }
     }
   };
+
+  // const connectWallet = () => {
+  //   const { ethereum } = window;
+  //   if (ethereum && ethereum.isMetaMask) {
+  //     console.log("Ethereum successfully detected!");
+  //     // Access the decentralized web!
+  //   } else {
+  //     console.log("Please install MetaMask!");
+  //   }
+  // };
 
   const getAccountPath = (accountName) => {
     setCurrentAccount(accountName);
