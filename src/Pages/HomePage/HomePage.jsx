@@ -36,20 +36,6 @@ export const HomePage = () => {
     }
   };
 
-  const getAccountPath = (accountName) => {
-    setCurrentAccount(accountName);
-    getUserBalance(accountName);
-  };
-
-  const getUserBalance = async (accountAddress) => {
-    try {
-      const balance = await provider.getBalance(accountAddress);
-      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   // const connectWallet = async () => {
   //   if (window.ethereum && window.ethereum.isMetaMask) {
   //     console.log("MetaMask Here!");
@@ -80,6 +66,20 @@ export const HomePage = () => {
   // };
 
   // handleBalance(currentAccount);
+
+  const getAccountPath = (accountName) => {
+    setCurrentAccount(accountName);
+    getUserBalance(accountName);
+  };
+
+  const getUserBalance = async (accountAddress) => {
+    try {
+      const balance = await provider.getBalance(accountAddress);
+      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
