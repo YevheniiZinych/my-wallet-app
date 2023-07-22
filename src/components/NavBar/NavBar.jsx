@@ -22,7 +22,7 @@ export const NavBar = ({ connectWallet, currentAccount, currentBalance }) => {
           src={logoImg}
           alt="Logo"
         ></img>
-        <LogoName>CryptoGod</LogoName>
+        <LogoName>CryptoShuttle</LogoName>
       </LogoWrapper>
 
       <InformContainer>
