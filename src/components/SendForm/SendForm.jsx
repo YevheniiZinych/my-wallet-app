@@ -3,6 +3,7 @@ import { parseEther } from "ethers";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import { useSendTransaction } from "wagmi";
 
 import { toast } from "react-hot-toast";
 import Button from "@mui/material/Button";
@@ -17,6 +18,11 @@ export const SendForm = ({ currentAccount }) => {
   const pattern = /^0x[0-9A-Fa-f]{40}$/;
 
   const parseAmount = parseEther(amount || "0");
+
+  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
+    to: accountValue,
+    value: parseAmount,
+  });
 
   const ChecksumChecker = () => {
     try {
@@ -71,34 +77,37 @@ export const SendForm = ({ currentAccount }) => {
     }
   };
 
-  const sendTransaction = async () => {
+  const sendTransactions = async () => {
     handleCheckPattern();
-    if (isValidAddress && amount) {
-      setIsSending(true);
-      try {
-        let params = [
-          {
-            from: currentAccount,
-            to: accountValue,
-            gas: Number(210000).toString(16),
-            gasPrice: Number(25000000).toString(16),
-            value: Number(parseAmount).toString(16),
-          },
-        ];
-        await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params,
-        });
-        setAccountValue("");
-        setAmount("");
-        setIsValidAddress(false);
-        setIsSending(false);
-      } catch (error) {
-        toast.error(error.message);
-      }
-    } else {
-      return;
-    }
+
+    sendTransaction();
+
+    // if (isValidAddress && amount) {
+    //   setIsSending(true);
+    //   try {
+    //     let params = [
+    //       {
+    //         from: currentAccount,
+    //         to: accountValue,
+    //         gas: Number(210000).toString(16),
+    //         gasPrice: Number(25000000).toString(16),
+    //         value: Number(parseAmount).toString(16),
+    //       },
+    //     ];
+    //     await window.ethereum.request({
+    //       method: "eth_sendTransaction",
+    //       params,
+    //     });
+    //     setAccountValue("");
+    //     setAmount("");
+    //     setIsValidAddress(false);
+    //     setIsSending(false);
+    //   } catch (error) {
+    //     toast.error(error.message);
+    //   }
+    // } else {
+    //   return;
+    // }
   };
 
   const predUpdate = (e) => {
@@ -142,14 +151,14 @@ export const SendForm = ({ currentAccount }) => {
         variant="outlined"
         type="number"
       />
-      {isSending ? (
+      {isLoading ? (
         <CircularProgress />
       ) : (
         <Button
           sx={{
             width: 150,
           }}
-          onClick={sendTransaction}
+          onClick={sendTransactions}
           variant="outlined"
           type="submit"
         >
