@@ -9,7 +9,7 @@ export const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: all 0.3s linear;
 
   background: rgba(255, 255, 255, 0.25);
@@ -18,11 +18,20 @@ export const Header = styled.header`
   -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
+
+  @media screen and (min-width: 320px) and (max-width: 400px) {
+    height: 100px;
+    justify-content: space-between;
+  }
 `;
 
 export const LogoName = styled.h2`
   margin-left: 10px;
   color: #635e5d;
+
+  @media screen and (min-width: 320px) and (max-width: 450px) {
+    font-size: 18px;
+  }
 `;
 
 export const LogoWrapper = styled.div`
@@ -45,17 +54,31 @@ export const Inner = styled.div`
     account ? "translateX(0)" : "translateX(-120%)"};
 
   width: 210px;
-  height: 40px;
+  height: 35px;
   margin-right: 10px;
 
   border: 1px solid #635e5d;
   border-radius: 10px;
+
+  @media screen and (min-width: 320px) and (max-width: 400px) {
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 5px;
+    width: 140px;
+    height: 60px;
+  }
 `;
 
 export const InformContainer = styled.div`
   position: relative;
-
-  width: 230px;
+  right: 0;
+  top: 5px;
+  width: 215px;
   height: 45px;
   overflow: hidden;
+
+  @media screen and (min-width: 320px) and (max-width: 400px) {
+    height: 80px;
+    width: 150px;
+  }
 `;

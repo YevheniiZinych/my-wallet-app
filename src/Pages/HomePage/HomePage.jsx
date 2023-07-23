@@ -34,6 +34,8 @@ export const HomePage = () => {
 
   const { address } = ethereumClient.getAccount();
 
+  console.log(address);
+
   const getUserBalance = async () => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
@@ -61,7 +63,7 @@ export const HomePage = () => {
             init={particlesInit}
             options={animateOptions}
           />
-          <SendForm currentAccount={address} />
+          <SendForm />
           <NavBar currentAccount={address} currentBalance={currentBalance} />
           <Toaster position="top-center" reverseOrder={false} />
         </Container>

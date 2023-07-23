@@ -4,17 +4,15 @@ import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { useSendTransaction } from "wagmi";
-
 import { toast } from "react-hot-toast";
 import Button from "@mui/material/Button";
 import sha3 from "js-sha3";
 import { StyledForm } from "./SendForm.style.mui";
 
-export const SendForm = ({ currentAccount }) => {
+export const SendForm = () => {
   const [accountValue, setAccountValue] = useState("");
   const [amount, setAmount] = useState("");
   const [isValidAddress, setIsValidAddress] = useState(false);
-  const [isSending, setIsSending] = useState(false);
   const pattern = /^0x[0-9A-Fa-f]{40}$/;
 
   const parseAmount = parseEther(amount || "0");
@@ -82,32 +80,11 @@ export const SendForm = ({ currentAccount }) => {
 
     sendTransaction();
 
-    // if (isValidAddress && amount) {
-    //   setIsSending(true);
-    //   try {
-    //     let params = [
-    //       {
-    //         from: currentAccount,
-    //         to: accountValue,
-    //         gas: Number(210000).toString(16),
-    //         gasPrice: Number(25000000).toString(16),
-    //         value: Number(parseAmount).toString(16),
-    //       },
-    //     ];
-    //     await window.ethereum.request({
-    //       method: "eth_sendTransaction",
-    //       params,
-    //     });
-    //     setAccountValue("");
-    //     setAmount("");
-    //     setIsValidAddress(false);
-    //     setIsSending(false);
-    //   } catch (error) {
-    //     toast.error(error.message);
-    //   }
-    // } else {
-    //   return;
-    // }
+    if (isSuccess) {
+      setAccountValue("");
+      setAmount("");
+      setIsValidAddress(false);
+    }
   };
 
   const predUpdate = (e) => {
