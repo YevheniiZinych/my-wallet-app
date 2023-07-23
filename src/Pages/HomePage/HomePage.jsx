@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ethers, formatEther, getAddress } from "ethers";
+import { ethers, formatEther } from "ethers";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
 import { Toaster, toast } from "react-hot-toast";
@@ -7,67 +7,46 @@ import { animateOptions } from "../../components/options/AnimateBackOptions/Anim
 import { NavBar } from "../../components/NavBar/NavBar";
 import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
-import { MetaMaskSDK } from "@metamask/sdk";
-import detectEthereumProvider from "@metamask/detect-provider";
 
 export const HomePage = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [currentBalance, setCurrentBalance] = useState("");
 
-  let signer = null;
-  let provider = null;
+  // let signer = null;
+  // let provider = null;
 
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      handleEthereum();
-    } else {
-      window.addEventListener("ethereum#initialized", handleEthereum, {
-        once: true,
-      });
-    }
-    // new MetaMaskSDK({
-    //   useDeeplink: true,
-    //   communicationLayerPreference: "socket",
-    // });
-    // if (window.ethereum === null) {
-    //   toast.error("MetaMask not installed");
-    //   // provider = ethers.getDefaultProvider();
-    // } else {
-    //   try {
-    //     provider = new ethers.BrowserProvider(window.ethereum);
-    //     signer = await provider.getSigner();
-    //     getAccountPath(signer.address);
-    //     toast.success("Connecting successfully");
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-  };
+  // const connectWallet = async () => {
 
-  const handleEthereum = async () => {
-    if (window.ethereum) {
-      try {
-        // Request account access from the user
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
+  //   if (window.ethereum === null) {
+  //     toast.error("MetaMask not installed");
+  //     // provider = ethers.getDefaultProvider();
+  //   } else {
+  //     try {
+  //       provider = new ethers.BrowserProvider(window.ethereum);
+  //       signer = await provider.getSigner();
+  //       getAccountPath(signer.address);
+  //       toast.success("Connecting successfully");
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
-        // Create an ethers.js provider using MetaMask's provider
-        const provider = new ethers.BrowserProvider(window.ethereum);
+  // const getAccountPath = (accountName) => {
+  //   setCurrentAccount(accountName);
+  //   getUserBalance(accountName);
+  // };
 
-        // Get the signer (account)
-        await provider
-          .getSigner()
-          .then((result) => setCurrentAccount(result.address));
+  // const getUserBalance = async (accountAddress) => {
+  //   try {
+  //     const balance = await provider.getBalance(accountAddress);
+  //     setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
-        toast.success("Connected account address");
-      } catch (error) {
-        console.error("Error connecting to MetaMask:", error);
-      }
-    } else {
-      toast.error("MetaMask not detected in the mobile browser.");
-    }
-  };
+  //---------------------------------------------------------------
 
   // const connectWallet = async () => {
   //   if (window.ethereum && window.ethereum.isMetaMask) {
@@ -100,19 +79,9 @@ export const HomePage = () => {
 
   // handleBalance(currentAccount);
 
-  const getAccountPath = (accountName) => {
-    setCurrentAccount(accountName);
-    getUserBalance(accountName);
-  };
+  //---------------------------------------------------------------------------
 
-  const getUserBalance = async (accountAddress) => {
-    try {
-      const balance = await provider.getBalance(accountAddress);
-      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  const connectWallet = async () => {};
 
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
