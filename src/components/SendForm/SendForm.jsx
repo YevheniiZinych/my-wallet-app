@@ -18,39 +18,6 @@ export const SendForm = ({ currentAccount }) => {
 
   const parseAmount = parseEther(amount || "0");
 
-  let params = [
-    {
-      from: currentAccount,
-      to: accountValue,
-      gas: Number(210000).toString(10),
-      gasPrice: Number(25000000).toString(10),
-      value: Number(parseAmount).toString(16),
-    },
-  ];
-
-  const handleCheckPattern = () => {
-    if (pattern.test(accountValue)) {
-      toast.success("Address correct");
-    } else {
-      toast.error(
-        "Invalid address. Address should start from 0x and have 40 symbols"
-      );
-    }
-  };
-
-  const handleChange = (e) => {
-    switch (e.target.name) {
-      case "wallet_address":
-        setAccountValue(e.target.value);
-        break;
-      case "amount":
-        setAmount(e.target.value);
-        break;
-      default:
-        break;
-    }
-  };
-
   const ChecksumChecker = () => {
     try {
       const addressWithoutPrefix = accountValue
@@ -79,25 +46,59 @@ export const SendForm = ({ currentAccount }) => {
     }
   };
 
+  const handleCheckPattern = () => {
+    if (pattern.test(accountValue)) {
+      toast.success("Address correct");
+    } else {
+      toast.error(
+        "Invalid address. Address should start from 0x and have 40 symbols"
+      );
+    }
+
+    ChecksumChecker();
+  };
+
+  const handleChange = (e) => {
+    switch (e.target.name) {
+      case "wallet_address":
+        setAccountValue(e.target.value);
+        break;
+      case "amount":
+        setAmount(e.target.value);
+        break;
+      default:
+        break;
+    }
+  };
+
   const sendTransaction = async () => {
+    handleCheckPattern();
     if (isValidAddress && amount) {
       setIsSending(true);
       try {
+        let params = [
+          {
+            from: currentAccount,
+            to: accountValue,
+            gas: Number(210000).toString(16),
+            gasPrice: Number(25000000).toString(16),
+            value: Number(parseAmount).toString(16),
+          },
+        ];
         await window.ethereum.request({
           method: "eth_sendTransaction",
           params,
         });
+        setAccountValue("");
+        setAmount("");
+        setIsValidAddress(false);
+        setIsSending(false);
       } catch (error) {
         toast.error(error.message);
       }
     } else {
       return;
     }
-
-    setAccountValue("");
-    setAmount("");
-    setIsValidAddress(false);
-    setIsSending(false);
   };
 
   const predUpdate = (e) => {
@@ -148,11 +149,7 @@ export const SendForm = ({ currentAccount }) => {
           sx={{
             width: 150,
           }}
-          onClick={() => {
-            sendTransaction();
-            handleCheckPattern();
-            ChecksumChecker();
-          }}
+          onClick={sendTransaction}
           variant="outlined"
           type="submit"
         >
