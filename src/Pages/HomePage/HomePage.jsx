@@ -1,5 +1,13 @@
 import { useState, useCallback } from "react";
 import { ethers, formatEther } from "ethers";
+import {
+  EthereumClient,
+  w3mConnectors,
+  w3mProvider,
+} from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/react";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
 import { Toaster, toast } from "react-hot-toast";
@@ -9,98 +17,56 @@ import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
 
 export const HomePage = () => {
-  const [currentAccount, setCurrentAccount] = useState("");
   const [currentBalance, setCurrentBalance] = useState("");
 
-  // let signer = null;
-  // let provider = null;
+  const chains = [arbitrum, mainnet, polygon];
+  const projectId = "4150f8aa2320cdac2662b512989975ee";
 
-  // const connectWallet = async () => {
+  const { publicClient } = configureChains(chains, [
+    w3mProvider({ projectId }),
+  ]);
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors: w3mConnectors({ projectId, chains }),
+    publicClient,
+  });
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
-  //   if (window.ethereum === null) {
-  //     toast.error("MetaMask not installed");
-  //     // provider = ethers.getDefaultProvider();
-  //   } else {
-  //     try {
-  //       provider = new ethers.BrowserProvider(window.ethereum);
-  //       signer = await provider.getSigner();
-  //       getAccountPath(signer.address);
-  //       toast.success("Connecting successfully");
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
+  const { address } = ethereumClient.getAccount();
 
-  // const getAccountPath = (accountName) => {
-  //   setCurrentAccount(accountName);
-  //   getUserBalance(accountName);
-  // };
+  const getUserBalance = async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const balance = await provider.getBalance(address);
+      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
-  // const getUserBalance = async (accountAddress) => {
-  //   try {
-  //     const balance = await provider.getBalance(accountAddress);
-  //     setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-
-  //---------------------------------------------------------------
-
-  // const connectWallet = async () => {
-  //   if (window.ethereum && window.ethereum.isMetaMask) {
-  //     console.log("MetaMask Here!");
-  //     window.ethereum
-  //       .request({ method: "eth_requestAccounts" })
-  //       .then((result) => {
-  //         console.log(result);
-  //         // setLogged(true);
-  //         setCurrentAccount(getAddress(result[0]));
-  //       })
-  //       .catch((error) => {
-  //         console.log("Could not detect Account");
-  //       });
-  //   } else {
-  //     console.log("Need to install MetaMask");
-  //   }
-  // };
-
-  // const handleBalance = (currentAccount) => {
-  //   window.ethereum
-  //     .request({ method: "eth_getBalance", params: [currentAccount, "latest"] })
-  //     .then((balance) => {
-  //       setCurrentBalance(formatEther(balance));
-  //     })
-  //     .catch((error) => {
-  //       console.log("Could not detect the Balance");
-  //     });
-  // };
-
-  // handleBalance(currentAccount);
-
-  //---------------------------------------------------------------------------
-
-  const connectWallet = async () => {};
+  if (address) {
+    getUserBalance();
+  }
 
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
   }, []);
 
   return (
-    <Container>
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={animateOptions}
-      />
-      <SendForm currentAccount={currentAccount} />
-      <NavBar
-        connectWallet={connectWallet}
-        currentAccount={currentAccount}
-        currentBalance={currentBalance}
-      />
-      <Toaster position="top-center" reverseOrder={false} />
-    </Container>
+    <>
+      <WagmiConfig config={wagmiConfig}>
+        <Container>
+          <Particles
+            id="tsparticles"
+            init={particlesInit}
+            options={animateOptions}
+          />
+          <SendForm currentAccount={address} />
+          <NavBar currentAccount={address} currentBalance={currentBalance} />
+          <Toaster position="top-center" reverseOrder={false} />
+        </Container>
+      </WagmiConfig>
+      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+    </>
   );
 };

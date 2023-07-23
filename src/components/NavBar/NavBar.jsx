@@ -11,8 +11,13 @@ import { CopyButton } from "../CopyButton/CopyButton";
 import logoImg from "../../images/cripto-logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 
-export const NavBar = ({ connectWallet, currentAccount, currentBalance }) => {
+export const NavBar = ({ currentAccount, currentBalance }) => {
   const { open, close } = useWeb3Modal();
+
+  const openModal = () => {
+    open();
+  };
+
   return (
     <Header>
       <LogoWrapper>
@@ -30,8 +35,9 @@ export const NavBar = ({ connectWallet, currentAccount, currentBalance }) => {
       <InformContainer>
         <ConnectBtn
           account={currentAccount}
-          // onClick={connectWallet}
-          onClick={() => open()}
+          onClick={() => {
+            openModal();
+          }}
           variant="outlined"
           type="button"
         >
