@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ethers, formatEther } from "ethers";
+import { ethers, formatEther, getAddress } from "ethers";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
 import { Toaster, toast } from "react-hot-toast";
@@ -44,13 +44,28 @@ export const HomePage = () => {
     // }
   };
 
-  const handleEthereum = () => {
-    const { ethereum } = window;
-    if (ethereum && ethereum.isMetaMask) {
-      toast.success("Ethereum successfully detected!");
-      // Access the decentralized web!
+  const handleEthereum = async () => {
+    if (window.ethereum) {
+      try {
+        // Request account access from the user
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+
+        // Create an ethers.js provider using MetaMask's provider
+        const provider = new ethers.BrowserProvider(window.ethereum);
+
+        // Get the signer (account)
+        await provider
+          .getSigner()
+          .then((result) => setCurrentAccount(result.address));
+
+        toast.success("Connected account address");
+      } catch (error) {
+        console.error("Error connecting to MetaMask:", error);
+      }
     } else {
-      toast.error("Please install MetaMask!");
+      toast.error("MetaMask not detected in the mobile browser.");
     }
   };
 
