@@ -65,10 +65,8 @@ export const HomePage = () => {
             init={particlesInit}
             options={animateOptions}
           />
-
-          <NavBar address={address} currentBalance={currentBalance} />
           <SendForm />
-
+          <NavBar address={address} currentBalance={currentBalance} />
           <RepoLink
             href="https://github.com/YevheniiZinych/my-wallet-app"
             target="_blank"
