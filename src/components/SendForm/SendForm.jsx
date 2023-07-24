@@ -6,7 +6,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { useSendTransaction } from "wagmi";
 import Button from "@mui/material/Button";
 import { StyledForm } from "./SendForm.style.mui";
-import handleCheckPattern from "../../utils/handleCheckPattern";
+import { handleCheckPattern } from "../../utils/handleCheckPattern";
 
 export const SendForm = () => {
   const [accountValue, setAccountValue] = useState("");
