@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import { ShortenedView } from "../ShortenedView/ShortenedView";
 import {
@@ -7,14 +8,35 @@ import {
   LogoName,
   LogoWrapper,
 } from "./NavBar.styled";
+import { toast } from "react-hot-toast";
 import { ConnectBtn } from "./NavBar.style.mui";
 import { CopyButton } from "../CopyButton/CopyButton";
 import logoImg from "../../images/cripto-logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { theme } from "../../config/breakpoints";
 
-export const NavBar = ({ address, currentBalance }) => {
+import { useAccount } from "wagmi";
+import { ethers, formatEther } from "ethers";
+
+export const NavBar = ({}) => {
+  const [currentBalance, setCurrentBalance] = useState("");
   const { open } = useWeb3Modal();
+
+  const { address } = useAccount();
+
+  const getUserBalance = async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const balance = await provider.getBalance(address);
+      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  if (address) {
+    getUserBalance();
+  }
 
   return (
     <Header>
