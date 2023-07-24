@@ -1,5 +1,4 @@
-import { useState, useCallback } from "react";
-import { ethers, formatEther } from "ethers";
+import { useCallback } from "react";
 import {
   EthereumClient,
   w3mConnectors,
@@ -10,7 +9,6 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
-import { toast } from "react-hot-toast";
 import { animateOptions } from "../../components/options/AnimateBackOptions/AnimateBackOptions";
 import { NavBar } from "../../components/NavBar/NavBar";
 import { SendForm } from "../../components/SendForm/SendForm";
@@ -20,10 +18,8 @@ import { RepoLink } from "./HomePage.styled";
 const WALLET_KEY = import.meta.env.VITE_API_KEY;
 
 export const HomePage = () => {
-  const [currentBalance, setCurrentBalance] = useState("");
-
   const chains = [arbitrum, mainnet, polygon];
-  const projectId = "4150f8aa2320cdac2662b512989975ee";
+  const projectId = WALLET_KEY;
 
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
@@ -36,20 +32,6 @@ export const HomePage = () => {
   const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
   const { address } = ethereumClient.getAccount();
-
-  const getUserBalance = async () => {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const balance = await provider.getBalance(address);
-      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  if (address) {
-    getUserBalance();
-  }
 
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
@@ -65,11 +47,14 @@ export const HomePage = () => {
             options={animateOptions}
           />
           <SendForm />
-          <NavBar
-            ethereumClient={ethereumClient}
-            currentAccount={address}
-            currentBalance={currentBalance}
-          />
+          <NavBar ethereumClient={ethereumClient} currentAccount={address} />
+          <RepoLink
+            href="https://github.com/YevheniiZinych/my-wallet-app"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            https://github.com/YevheniiZinych/my-wallet-app
+          </RepoLink>
         </Container>
       </WagmiConfig>
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
