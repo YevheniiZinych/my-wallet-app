@@ -65,7 +65,11 @@ export const HomePage = () => {
             options={animateOptions}
           />
           <SendForm />
-          <NavBar currentAccount={address} currentBalance={currentBalance} />
+          <NavBar
+            ethereumClient={ethereumClient}
+            currentAccount={address}
+            currentBalance={currentBalance}
+          />
         </Container>
       </WagmiConfig>
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />

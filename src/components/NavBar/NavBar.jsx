@@ -13,8 +13,16 @@ import { CopyButton } from "../CopyButton/CopyButton";
 import logoImg from "../../images/cripto-logo.png";
 import { theme } from "../../config/breakpoints";
 
-export const NavBar = ({ currentAccount: address, currentBalance }) => {
+export const NavBar = ({
+  // currentAccount: address,
+  currentBalance,
+  ethereumClient,
+}) => {
   const { open, close } = useWeb3Modal();
+
+  const { address } = ethereumClient.getAccount();
+
+  console.log(address);
 
   const onOpen = () => {
     open();
