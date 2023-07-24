@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 
 export const StyledForm = styled(Box)(() => ({
+  position: "relative",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",

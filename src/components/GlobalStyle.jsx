@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
     color: #252f38;
     background-color: #fff;
     font-size: 20px;
-    margin: 
+  
   }
 
   img {

@@ -13,11 +13,11 @@ import logoImg from "../../images/cripto-logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { theme } from "../../config/breakpoints";
 
-export const NavBar = ({ currentAccount, currentBalance }) => {
-  const { open, close } = useWeb3Modal();
-  console.log(currentAccount);
-  const openModal = () => {
-    open();
+export const NavBar = ({ address, currentBalance }) => {
+  const { open } = useWeb3Modal();
+
+  const onConnect = async () => {
+    await open();
   };
 
   return (
@@ -36,37 +36,37 @@ export const NavBar = ({ currentAccount, currentBalance }) => {
         </LogoWrapper>
 
         <InformContainer>
-          {currentAccount ? (
-            <Inner account={currentAccount}>
-              <p
-                style={{
-                  margin: 0,
-                }}
-              >
-                {currentBalance}
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <ShortenedView openModal={openModal} address={currentAccount} />
-                <CopyButton address={currentAccount} />
-              </div>
-            </Inner>
-          ) : (
-            <ConnectBtn
-              account={currentAccount}
-              onClick={() => {
-                openModal();
+          <Inner account={address}>
+            <p
+              style={{
+                margin: 0,
               }}
-              variant="outlined"
-              type="button"
             >
-              Connect wallet
-            </ConnectBtn>
-          )}
+              {currentBalance}
+            </p>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <ShortenedView
+                close={close}
+                onConnect={onConnect}
+                address={address}
+              />
+              <CopyButton address={address} />
+            </div>
+          </Inner>
+
+          <ConnectBtn
+            account={address}
+            onClick={onConnect}
+            variant="outlined"
+            type="button"
+          >
+            Connect wallet
+          </ConnectBtn>
         </InformContainer>
       </ThemeProvider>
     </Header>

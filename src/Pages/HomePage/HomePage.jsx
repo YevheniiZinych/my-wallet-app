@@ -1,40 +1,18 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
+import { useAccount } from "wagmi";
 import { ethers, formatEther } from "ethers";
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from "@web3modal/ethereum";
-import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon } from "wagmi/chains";
+import { toast } from "react-hot-toast";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
-import { Toaster, toast } from "react-hot-toast";
 import { animateOptions } from "../../components/options/AnimateBackOptions/AnimateBackOptions";
 import { NavBar } from "../../components/NavBar/NavBar";
 import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
+import { RepoLink } from "./HomePage.styled";
 
 export const HomePage = () => {
   const [currentBalance, setCurrentBalance] = useState("");
-
-  const chains = [arbitrum, mainnet, polygon];
-  const projectId = "4150f8aa2320cdac2662b512989975ee";
-
-  const { publicClient } = configureChains(chains, [
-    w3mProvider({ projectId }),
-  ]);
-  const wagmiConfig = createConfig({
-    autoConnect: true,
-    connectors: w3mConnectors({ projectId, chains }),
-    publicClient,
-  });
-  const ethereumClient = new EthereumClient(wagmiConfig, chains);
-
-  const { address } = ethereumClient.getAccount();
-
-  console.log(address);
+  const { address } = useAccount();
 
   const getUserBalance = async () => {
     try {
@@ -56,19 +34,22 @@ export const HomePage = () => {
 
   return (
     <>
-      <WagmiConfig config={wagmiConfig}>
-        <Container>
-          <Particles
-            id="tsparticles"
-            init={particlesInit}
-            options={animateOptions}
-          />
-          <SendForm />
-          <NavBar currentAccount={address} currentBalance={currentBalance} />
-          <Toaster position="top-center" reverseOrder={false} />
-        </Container>
-      </WagmiConfig>
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+      <Container>
+        <Particles
+          id="tsparticles"
+          init={particlesInit}
+          options={animateOptions}
+        />
+        <NavBar address={address} currentBalance={currentBalance} />
+        <SendForm />
+        <RepoLink
+          href="https://github.com/YevheniiZinych/my-wallet-app"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          https://github.com/YevheniiZinych/my-wallet-app
+        </RepoLink>
+      </Container>
     </>
   );
 };
