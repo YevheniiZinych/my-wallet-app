@@ -1,7 +1,4 @@
-import { useCallback, useState } from "react";
-import { WagmiConfig, createConfig, mainnet } from "wagmi";
-import { createPublicClient, http } from "viem";
-import { useAccount } from "wagmi";
+import { useState, useCallback } from "react";
 import { ethers, formatEther } from "ethers";
 import {
   EthereumClient,
@@ -9,11 +6,11 @@ import {
   w3mProvider,
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains } from "wagmi";
-// import { arbitrum, mainnet, polygon } from "wagmi/chains";
-import { toast } from "react-hot-toast";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
+import { toast } from "react-hot-toast";
 import { animateOptions } from "../../components/options/AnimateBackOptions/AnimateBackOptions";
 import { NavBar } from "../../components/NavBar/NavBar";
 import { SendForm } from "../../components/SendForm/SendForm";
@@ -22,42 +19,38 @@ import { RepoLink } from "./HomePage.styled";
 
 // const WALLET_KEY = import.meta.env.VITE_API_KEY;
 
-// const chains = [arbitrum, mainnet, polygon];
-// const projectId = WALLET_KEY;
-
-// const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-// const wagmiConfig = createConfig({
-//   autoConnect: true,
-//   connectors: w3mConnectors({ projectId, chains }),
-//   publicClient,
-// });
-// const ethereumClient = new EthereumClient(wagmiConfig, chains);
-
-const config = createConfig({
-  autoConnect: true,
-  publicClient: createPublicClient({
-    chain: mainnet,
-    transport: http(),
-  }),
-});
-
 export const HomePage = () => {
-  // const [currentBalance, setCurrentBalance] = useState("");
+  const [currentBalance, setCurrentBalance] = useState("");
   // const { address } = useAccount();
 
-  // const getUserBalance = async () => {
-  //   try {
-  //     const provider = new ethers.BrowserProvider(window.ethereum);
-  //     const balance = await provider.getBalance(address);
-  //     setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
+  const chains = [arbitrum, mainnet, polygon];
+  const projectId = "4150f8aa2320cdac2662b512989975ee";
 
-  // if (address) {
-  //   getUserBalance();
-  // }
+  const { publicClient } = configureChains(chains, [
+    w3mProvider({ projectId }),
+  ]);
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors: w3mConnectors({ projectId, chains }),
+    publicClient,
+  });
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
+
+  const { address } = ethereumClient.getAccount();
+
+  const getUserBalance = async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const balance = await provider.getBalance(address);
+      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  if (address) {
+    getUserBalance();
+  }
 
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
@@ -65,7 +58,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <WagmiConfig config={config}>
+      <WagmiConfig config={wagmiConfig}>
         <Container>
           <Particles
             id="tsparticles"
@@ -73,7 +66,7 @@ export const HomePage = () => {
             options={animateOptions}
           />
 
-          <NavBar />
+          <NavBar address={address} currentBalance={currentBalance} />
           <SendForm />
 
           <RepoLink
@@ -85,7 +78,7 @@ export const HomePage = () => {
           </RepoLink>
         </Container>
       </WagmiConfig>
-      {/* <Web3Modal projectId={projectId} ethereumClient={ethereumClient} /> */}
+      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </>
   );
 };

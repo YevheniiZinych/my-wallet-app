@@ -16,33 +16,37 @@ import logoImg from "../../images/cripto-logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { theme } from "../../config/breakpoints";
 
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { ethers, formatEther } from "ethers";
+// import { useAccount, useConnect, useDisconnect } from "wagmi";
+// import { InjectedConnector } from "wagmi/connectors/injected";
+// import { ethers, formatEther } from "ethers";
 
-export const NavBar = ({}) => {
-  const [currentBalance, setCurrentBalance] = useState("");
-  // const { open } = useWeb3Modal();
+export const NavBar = ({ address = "", currentBalance }) => {
+  // const [currentBalance, setCurrentBalance] = useState("");
+  const { open } = useWeb3Modal();
 
-  const { address } = useAccount();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
-  const { disconnect } = useDisconnect();
-
-  const getUserBalance = async () => {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const balance = await provider.getBalance(address);
-      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-    } catch (error) {
-      toast.error(error.message);
-    }
+  const onOpen = () => {
+    open();
   };
 
-  if (address) {
-    getUserBalance();
-  }
+  // const { address } = useAccount();
+  // const { connect } = useConnect({
+  //   connector: new InjectedConnector(),
+  // });
+  // const { disconnect } = useDisconnect();
+
+  // const getUserBalance = async () => {
+  //   try {
+  //     const provider = new ethers.BrowserProvider(window.ethereum);
+  //     const balance = await provider.getBalance(address);
+  //     setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
+
+  // if (address) {
+  //   getUserBalance();
+  // }
 
   return (
     <Header>
@@ -76,7 +80,7 @@ export const NavBar = ({}) => {
             >
               <ShortenedView
                 close={close}
-                onConnect={disconnect}
+                onConnect={onOpen}
                 address={address}
               />
               <CopyButton address={address} />
@@ -85,7 +89,7 @@ export const NavBar = ({}) => {
 
           <ConnectBtn
             account={address}
-            onClick={() => connect()}
+            onClick={onOpen}
             variant="outlined"
             type="button"
           >
