@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { ThemeProvider } from "@mui/material";
 import { ShortenedView } from "../ShortenedView/ShortenedView";
 import {
@@ -15,12 +14,9 @@ import { CopyButton } from "../CopyButton/CopyButton";
 import logoImg from "../../images/cripto-logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { theme } from "../../config/breakpoints";
-
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-// import { InjectedConnector } from "wagmi/connectors/injected";
 import { ethers, formatEther } from "ethers";
 
-export const NavBar = () => {
+export const NavBar = ({ ethereumClient }) => {
   const [currentBalance, setCurrentBalance] = useState("");
   const { open } = useWeb3Modal();
 
@@ -28,7 +24,7 @@ export const NavBar = () => {
     open();
   };
 
-  const { address } = useAccount();
+  const { address } = ethereumClient.getAccount();
 
   const getUserBalance = async () => {
     try {
