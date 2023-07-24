@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { useCallback } from "react";
+import {
+  EthereumClient,
+  w3mConnectors,
+  w3mProvider,
+} from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/react";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import { toast } from "react-hot-toast";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
@@ -10,10 +18,23 @@ import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
 import { RepoLink } from "./HomePage.styled";
 
-export const HomePage = ({ ethereumClient }) => {
+const WALLET_KEY = import.meta.env.VITE_API_KEY;
+
+export const HomePage = () => {
   const [currentBalance, setCurrentBalance] = useState("");
 
-  console.log(ethereumClient);
+  const chains = [arbitrum, mainnet, polygon];
+  const projectId = WALLET_KEY;
+
+  const { publicClient } = configureChains(chains, [
+    w3mProvider({ projectId }),
+  ]);
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors: w3mConnectors({ projectId, chains }),
+    publicClient,
+  });
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
   const { address } = ethereumClient.getAccount();
 
@@ -37,24 +58,27 @@ export const HomePage = ({ ethereumClient }) => {
 
   return (
     <>
-      <Container>
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          options={animateOptions}
-        />
+      <WagmiConfig config={wagmiConfig}>
+        <Container>
+          <Particles
+            id="tsparticles"
+            init={particlesInit}
+            options={animateOptions}
+          />
 
-        <NavBar address={address} currentBalance={currentBalance} />
-        <SendForm />
+          <NavBar address={address} currentBalance={currentBalance} />
+          <SendForm />
 
-        <RepoLink
-          href="https://github.com/YevheniiZinych/my-wallet-app"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          https://github.com/YevheniiZinych/my-wallet-app
-        </RepoLink>
-      </Container>
+          <RepoLink
+            href="https://github.com/YevheniiZinych/my-wallet-app"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            https://github.com/YevheniiZinych/my-wallet-app
+          </RepoLink>
+        </Container>
+      </WagmiConfig>
+      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </>
   );
 };
