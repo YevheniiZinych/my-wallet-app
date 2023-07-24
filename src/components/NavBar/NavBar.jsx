@@ -16,37 +16,33 @@ import logoImg from "../../images/cripto-logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { theme } from "../../config/breakpoints";
 
-// import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 // import { InjectedConnector } from "wagmi/connectors/injected";
-// import { ethers, formatEther } from "ethers";
+import { ethers, formatEther } from "ethers";
 
-export const NavBar = ({ address = "", currentBalance }) => {
-  // const [currentBalance, setCurrentBalance] = useState("");
+export const NavBar = () => {
+  const [currentBalance, setCurrentBalance] = useState("");
   const { open } = useWeb3Modal();
 
   const onOpen = () => {
     open();
   };
 
-  // const { address } = useAccount();
-  // const { connect } = useConnect({
-  //   connector: new InjectedConnector(),
-  // });
-  // const { disconnect } = useDisconnect();
+  const { address } = useAccount();
 
-  // const getUserBalance = async () => {
-  //   try {
-  //     const provider = new ethers.BrowserProvider(window.ethereum);
-  //     const balance = await provider.getBalance(address);
-  //     setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
+  const getUserBalance = async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const balance = await provider.getBalance(address);
+      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
-  // if (address) {
-  //   getUserBalance();
-  // }
+  if (address) {
+    getUserBalance();
+  }
 
   return (
     <Header>
