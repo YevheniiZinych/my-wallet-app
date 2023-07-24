@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import { ChecksumChecker } from "./ChecksumChecker";
+import { ChecksumChecker } from "./checksumChecker";
 
 export const handleCheckPattern = (accountValue) => {
   const pattern = /^0x[0-9A-Fa-f]{40}$/;
