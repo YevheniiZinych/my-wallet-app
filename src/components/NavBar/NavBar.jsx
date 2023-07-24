@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { ThemeProvider } from "@mui/material";
 import { ShortenedView } from "../ShortenedView/ShortenedView";
 import {
@@ -15,14 +16,19 @@ import logoImg from "../../images/cripto-logo.png";
 import { useWeb3Modal } from "@web3modal/react";
 import { theme } from "../../config/breakpoints";
 
-import { useAccount } from "wagmi";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 import { ethers, formatEther } from "ethers";
 
 export const NavBar = ({}) => {
   const [currentBalance, setCurrentBalance] = useState("");
-  const { open } = useWeb3Modal();
+  // const { open } = useWeb3Modal();
 
   const { address } = useAccount();
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+  const { disconnect } = useDisconnect();
 
   const getUserBalance = async () => {
     try {
@@ -68,14 +74,18 @@ export const NavBar = ({}) => {
                 alignItems: "center",
               }}
             >
-              <ShortenedView close={close} onConnect={open} address={address} />
+              <ShortenedView
+                close={close}
+                onConnect={disconnect}
+                address={address}
+              />
               <CopyButton address={address} />
             </div>
           </Inner>
 
           <ConnectBtn
             account={address}
-            onClick={() => open()}
+            onClick={() => connect()}
             variant="outlined"
             type="button"
           >

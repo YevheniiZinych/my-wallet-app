@@ -1,4 +1,6 @@
 import { useCallback, useState } from "react";
+import { WagmiConfig, createConfig, mainnet } from "wagmi";
+import { createPublicClient, http } from "viem";
 import { useAccount } from "wagmi";
 import { ethers, formatEther } from "ethers";
 import {
@@ -7,8 +9,8 @@ import {
   w3mProvider,
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon } from "wagmi/chains";
+import { configureChains } from "wagmi";
+// import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import { toast } from "react-hot-toast";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
@@ -18,18 +20,26 @@ import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
 import { RepoLink } from "./HomePage.styled";
 
-const WALLET_KEY = import.meta.env.VITE_API_KEY;
+// const WALLET_KEY = import.meta.env.VITE_API_KEY;
 
-const chains = [arbitrum, mainnet, polygon];
-const projectId = WALLET_KEY;
+// const chains = [arbitrum, mainnet, polygon];
+// const projectId = WALLET_KEY;
 
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-const wagmiConfig = createConfig({
+// const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+// const wagmiConfig = createConfig({
+//   autoConnect: true,
+//   connectors: w3mConnectors({ projectId, chains }),
+//   publicClient,
+// });
+// const ethereumClient = new EthereumClient(wagmiConfig, chains);
+
+const config = createConfig({
   autoConnect: true,
-  connectors: w3mConnectors({ projectId, chains }),
-  publicClient,
+  publicClient: createPublicClient({
+    chain: mainnet,
+    transport: http(),
+  }),
 });
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
 export const HomePage = () => {
   // const [currentBalance, setCurrentBalance] = useState("");
@@ -55,7 +65,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <WagmiConfig config={wagmiConfig}>
+      <WagmiConfig config={config}>
         <Container>
           <Particles
             id="tsparticles"
@@ -75,7 +85,7 @@ export const HomePage = () => {
           </RepoLink>
         </Container>
       </WagmiConfig>
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+      {/* <Web3Modal projectId={projectId} ethereumClient={ethereumClient} /> */}
     </>
   );
 };
