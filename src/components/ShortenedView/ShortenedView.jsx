@@ -4,8 +4,9 @@ export const ShortenedView = ({ address = "", onConnect }) => {
   return (
     <div>
       <p
-        onClick={onConnect}
+        onClick={() => onConnect()}
         style={{
+          cursor: "pointer",
           margin: 0,
         }}
       >

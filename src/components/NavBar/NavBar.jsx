@@ -16,10 +16,6 @@ import { theme } from "../../config/breakpoints";
 export const NavBar = ({ address, currentBalance }) => {
   const { open } = useWeb3Modal();
 
-  const onConnect = async () => {
-    await open();
-  };
-
   return (
     <Header>
       <ThemeProvider theme={theme}>
@@ -50,18 +46,14 @@ export const NavBar = ({ address, currentBalance }) => {
                 alignItems: "center",
               }}
             >
-              <ShortenedView
-                close={close}
-                onConnect={onConnect}
-                address={address}
-              />
+              <ShortenedView close={close} onConnect={open} address={address} />
               <CopyButton address={address} />
             </div>
           </Inner>
 
           <ConnectBtn
             account={address}
-            onClick={onConnect}
+            onClick={() => open()}
             variant="outlined"
             type="button"
           >
