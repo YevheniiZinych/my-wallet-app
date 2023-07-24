@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@mui/material";
+import { useWeb3Modal } from "@web3modal/react";
 import { ShortenedView } from "../ShortenedView/ShortenedView";
 import {
   Header,
@@ -7,15 +8,13 @@ import {
   LogoName,
   LogoWrapper,
 } from "./NavBar.styled";
-
 import { ConnectBtn } from "./NavBar.style.mui";
 import { CopyButton } from "../CopyButton/CopyButton";
 import logoImg from "../../images/cripto-logo.png";
-import { useWeb3Modal } from "@web3modal/react";
 import { theme } from "../../config/breakpoints";
 
-export const NavBar = ({ address, currentBalance }) => {
-  const { open } = useWeb3Modal();
+export const NavBar = ({ currentAccount: address, currentBalance }) => {
+  const { open, close } = useWeb3Modal();
 
   const onOpen = () => {
     open();
