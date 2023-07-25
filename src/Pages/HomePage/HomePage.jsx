@@ -20,7 +20,6 @@ const WALLET_KEY = import.meta.env.VITE_API_KEY;
 export const HomePage = () => {
   const chains = [arbitrum, mainnet, polygon];
   const projectId = WALLET_KEY;
-  const projectId = WALLET_KEY;
 
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
