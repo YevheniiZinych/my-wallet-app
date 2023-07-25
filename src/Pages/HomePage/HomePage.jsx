@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-
 import {
   EthereumClient,
   w3mConnectors,
@@ -10,7 +9,6 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon } from "wagmi/chains";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
-
 import { animateOptions } from "../../components/options/AnimateBackOptions/AnimateBackOptions";
 import { NavBar } from "../../components/NavBar/NavBar";
 import { SendForm } from "../../components/SendForm/SendForm";
@@ -52,8 +50,8 @@ export const HomePage = () => {
           <NavBar ethereumClient={ethereumClient} currentAccount={address} />
           <RepoLink
             href="https://github.com/YevheniiZinych/my-wallet-app"
-            target="_blanc"
-            rel="noopener noreferrer"
+            target="_blank"
+            rel="noreferrer noopener"
           >
             https://github.com/YevheniiZinych/my-wallet-app
           </RepoLink>

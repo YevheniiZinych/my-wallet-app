@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import { useWeb3Modal } from "@web3modal/react";
+import { ethers, formatEther } from "ethers";
+import { toast } from "react-hot-toast";
 import { ShortenedView } from "../ShortenedView/ShortenedView";
 import {
   Header,
@@ -9,18 +12,17 @@ import {
   LogoWrapper,
 } from "./NavBar.styled";
 import { ConnectBtn } from "./NavBar.style.mui";
-import { CopyButton } from "../CopyButton/CopyButton";
 import logoImg from "../../images/cripto-logo.png";
 import { theme } from "../../config/breakpoints";
 
 export const NavBar = ({ ethereumClient }) => {
   const { open, close } = useWeb3Modal();
 
-  const { address } = ethereumClient.getAccount();
-
   const onConnect = () => {
     open();
   };
+
+  const { address } = ethereumClient.getAccount();
 
   return (
     <Header>
