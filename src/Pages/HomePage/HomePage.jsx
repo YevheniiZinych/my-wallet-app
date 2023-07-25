@@ -23,7 +23,7 @@ export const HomePage = () => {
   const [currentBalance, setCurrentBalance] = useState("");
 
   const chains = [arbitrum, mainnet, polygon];
-  const projectId = "4150f8aa2320cdac2662b512989975ee";
+  const projectId = WALLET_KEY;
 
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
@@ -37,19 +37,19 @@ export const HomePage = () => {
 
   const { address } = ethereumClient.getAccount();
 
-  const getUserBalance = async () => {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const balance = await provider.getBalance(address);
-      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  // const getUserBalance = async () => {
+  //   try {
+  //     const provider = new ethers.BrowserProvider(window.ethereum);
+  //     const balance = await provider.getBalance(address);
+  //     setCurrentBalance(Number(formatEther(balance)).toFixed(3));
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
-  if (address) {
-    getUserBalance();
-  }
+  // if (address) {
+  //   getUserBalance();
+  // }
 
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
