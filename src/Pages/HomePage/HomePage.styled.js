@@ -11,11 +11,11 @@ export const Container = styled.div`
 
 export const RepoLink = styled.a`
   position: absolute;
-  bottom: 10px;
+  bottom: 70px;
 
   display: block;
 
-  height: 20px;
+  height: 50px;
   width: 300px;
   margin: 0 auto;
 
