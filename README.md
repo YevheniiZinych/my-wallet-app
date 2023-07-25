@@ -9,12 +9,6 @@ This application allows:
 - Send to another account your currency
 - Logout from your account
 
-### Deploy
-
-Site deploy on render.com
-
-- [link](my-wallet-app.onrender.com)
-
 ### Start project
 
 Clone this repository and open in your code editor
