@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useBalance } from "wagmi";
 import { ThemeProvider } from "@mui/material";
 import { useWeb3Modal } from "@web3modal/react";
-import { ethers, formatEther } from "ethers";
-import { toast } from "react-hot-toast";
+import { formatEther } from "ethers";
 import { ShortenedView } from "../ShortenedView/ShortenedView";
 import {
   Header,
@@ -17,24 +16,17 @@ import logoImg from "../../images/cripto-logo.png";
 import { theme } from "../../config/breakpoints";
 
 export const NavBar = ({ ethereumClient }) => {
-  const [currentBalance, setCurrentBalance] = useState("");
   const { open, close } = useWeb3Modal();
 
   const { address } = ethereumClient.getAccount();
 
-  const getUserBalance = async () => {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const balance = await provider.getBalance(address);
-      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  const { data } = useBalance({
+    address: address,
+  });
 
-  if (address) {
-    getUserBalance();
-  }
+  const value = data?.value || "0";
+
+  const balance = Number(formatEther(value)).toFixed(3);
 
   const onOpen = () => {
     open();
@@ -62,7 +54,7 @@ export const NavBar = ({ ethereumClient }) => {
                 margin: 0,
               }}
             >
-              {currentBalance}
+              {balance}
             </p>
             <div
               style={{
