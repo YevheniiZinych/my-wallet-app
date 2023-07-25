@@ -23,7 +23,7 @@ export const HomePage = () => {
   const [currentBalance, setCurrentBalance] = useState("");
 
   const chains = [arbitrum, mainnet, polygon];
-  const projectId = "4150f8aa2320cdac2662b512989975ee";
+  const projectId = WALLET_KEY;
 
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
