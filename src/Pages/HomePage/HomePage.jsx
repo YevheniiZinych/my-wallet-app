@@ -17,13 +17,11 @@ import { SendForm } from "../../components/SendForm/SendForm";
 import { Container } from "./HomePage.styled";
 import { RepoLink } from "./HomePage.styled";
 
-const WALLET_KEY = import.meta.env.VITE_API_KEY;
-
 export const HomePage = () => {
   const [currentBalance, setCurrentBalance] = useState("");
 
   const chains = [arbitrum, mainnet, polygon];
-  const projectId = WALLET_KEY;
+  const projectId = "4150f8aa2320cdac2662b512989975ee";
 
   const { publicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
