@@ -11,43 +11,18 @@ export const ShortenedView = ({ address = "", onConnect }) => {
 
   const shortenedAddress = address.slice(0, 6) + "....." + address.slice(-4);
 
-  const getUserBalance = async () => {
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const balance = await provider.getBalance(address);
-      setCurrentBalance(Number(formatEther(balance)).toFixed(3));
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  if (address) {
-    getUserBalance();
-  }
-
   return (
     <div>
       <p>{balance}</p>
       <p
+        onClick={onConnect}
         style={{
-          margin: 0,
-          height: 18,
+          cursor: "pointer",
+          marginLeft: 10,
         }}
       >
-        {currentBalance}
+        {shortenedAddress}
       </p>
-      <Inner>
-        <p
-          onClick={() => onConnect()}
-          style={{
-            cursor: "pointer",
-            marginLeft: 10,
-          }}
-        >
-          {shortenedAddress}
-        </p>
-        <CopyButton address={address} />
-      </Inner>
-    </Wrapper>
+    </div>
   );
 };

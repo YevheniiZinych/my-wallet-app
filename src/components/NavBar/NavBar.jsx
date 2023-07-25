@@ -20,11 +20,9 @@ export const NavBar = ({ currentBalance, ethereumClient }) => {
 
   const { address } = ethereumClient.getAccount();
 
-  const onOpen = () => {
+  const onConnect = () => {
     open();
   };
-
-  const { address } = ethereumClient.getAccount();
 
   return (
     <Header>
