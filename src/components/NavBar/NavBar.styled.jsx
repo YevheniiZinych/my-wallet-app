@@ -19,7 +19,7 @@ export const Header = styled.header`
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
 
-  @media screen and (min-width: 320px) and (max-width: 400px) {
+  @media screen and (min-width: 320px) and (max-width: 450px) {
     height: 100px;
     justify-content: space-between;
   }
@@ -60,7 +60,7 @@ export const Inner = styled.div`
   border: 1px solid #635e5d;
   border-radius: 10px;
 
-  @media screen and (min-width: 320px) and (max-width: 400px) {
+  @media screen and (min-width: 320px) and (max-width: 450px) {
     flex-direction: column;
     justify-content: space-around;
     gap: 5px;
@@ -77,7 +77,7 @@ export const InformContainer = styled.div`
   height: 45px;
   overflow: hidden;
 
-  @media screen and (min-width: 320px) and (max-width: 400px) {
+  @media screen and (min-width: 320px) and (max-width: 450px) {
     height: 80px;
     width: 150px;
   }

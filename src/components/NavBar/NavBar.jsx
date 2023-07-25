@@ -13,18 +13,12 @@ import { CopyButton } from "../CopyButton/CopyButton";
 import logoImg from "../../images/cripto-logo.png";
 import { theme } from "../../config/breakpoints";
 
-export const NavBar = ({
-  // currentAccount: address,
-  currentBalance,
-  ethereumClient,
-}) => {
+export const NavBar = ({ ethereumClient }) => {
   const { open, close } = useWeb3Modal();
 
   const { address } = ethereumClient.getAccount();
 
-  console.log(address);
-
-  const onOpen = () => {
+  const onConnect = () => {
     open();
   };
 
@@ -45,31 +39,19 @@ export const NavBar = ({
 
         <InformContainer>
           <Inner account={address}>
-            <p
-              style={{
-                margin: 0,
-              }}
-            >
-              {currentBalance}
-            </p>
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
               }}
             >
-              <ShortenedView
-                close={close}
-                onConnect={onOpen}
-                address={address}
-              />
-              <CopyButton address={address} />
+              <ShortenedView onConnect={onConnect} address={address} />
             </div>
           </Inner>
 
           <ConnectBtn
             account={address}
-            onClick={onOpen}
+            onClick={onConnect}
             variant="outlined"
             type="button"
           >
